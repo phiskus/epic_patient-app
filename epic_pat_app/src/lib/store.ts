@@ -1,5 +1,10 @@
 import { writable } from 'svelte/store';
 
+export interface Bundle<T> {
+  resourceType: 'Bundle';
+  entry?: { resource: T }[];
+}
+
 export interface PatientName {
   use?: string;
   family?: string;
@@ -49,6 +54,7 @@ export interface MedicationRequest {
   resourceType: 'MedicationRequest';
   status?: string;
   medicationCodeableConcept?: { text?: string; coding?: { display?: string }[] };
+   medicationReference?: { reference?: string; display?: string };  
   dosageInstruction?: Dosage[];
   authoredOn?: string;
   requester?: { display?: string };

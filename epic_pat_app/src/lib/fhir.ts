@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { FHIR_BASE_URL, ACCESS_TOKEN_KEY } from '../config';
-import type { Patient, Observation, MedicationRequest } from './store';
+import type { Patient, Observation, MedicationRequest, Bundle } from './store';
 
 function getAuthHeaders() {
   const token = localStorage.getItem(ACCESS_TOKEN_KEY);
@@ -19,7 +19,7 @@ export async function getPatient(patientId: string): Promise<Patient> {
 }
 
 export async function getVitals(patientId: string): Promise<Observation[]> {
-  const { data } = await axios.get(`${FHIR_BASE_URL}Observation`, {
+  const { data } = await axios.get<Bundle<Observation>>(`${FHIR_BASE_URL}Observation`, {
     headers: getAuthHeaders(),
     params: {
       patient: patientId,
@@ -28,11 +28,11 @@ export async function getVitals(patientId: string): Promise<Observation[]> {
       _count: 20,
     },
   });
-  return bundleEntries<Observation>(data);
+  return bundleEntries(data);
 }
 
 export async function getMedications(patientId: string): Promise<MedicationRequest[]> {
-  const { data } = await axios.get(`${FHIR_BASE_URL}MedicationRequest`, {
+  const { data } = await axios.get<Bundle<MedicationRequest>>(`${FHIR_BASE_URL}MedicationRequest`, {
     headers: getAuthHeaders(),
     params: {
       patient: patientId,
@@ -40,7 +40,7 @@ export async function getMedications(patientId: string): Promise<MedicationReque
       _count: 20,
     },
   });
-  return bundleEntries<MedicationRequest>(data);
+  return bundleEntries(data);
 }
 
 export async function getLabs(patientId: string): Promise<Observation[]> {

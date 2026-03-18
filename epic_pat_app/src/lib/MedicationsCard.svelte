@@ -7,6 +7,7 @@
   function medName(m: MedicationRequest) {
     return m.medicationCodeableConcept?.text
       ?? m.medicationCodeableConcept?.coding?.[0]?.display
+       ?? m.medicationReference?.display
       ?? 'Unknown medication';
   }
 
