@@ -1,0 +1,8 @@
+services:
+  app:
+    build: .
+    ports:
+      # Map 5173 on host → 80 in container so Epic OAuth redirect URI
+      # (http://localhost:5173/) works without any code changes
+      - "5173:80"
+    restart: unless-stopped
